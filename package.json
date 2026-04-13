@@ -1,0 +1,30 @@
+{
+  "name": "@hmidmismi/sanity-core",
+  "version": "0.1.0",
+  "description": "Shared Sanity core components and utilities",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf dist .sanity .turbo node_modules"
+  },
+  "dependencies": {
+    "@hmidmismi/ui": "workspace:*",
+    "react-icons": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14"
+  },
+  "peerDependencies": {
+    "@sanity/icons": "^3.7.4",
+    "@sanity/ui": "^3.1.14",
+    "react": "^19.2.5",
+    "sanity": "^5.0.0",
+    "sanity-plugin-internationalized-array": "^3.0.0"
+  },
+  "keywords": [],
+  "author": "jasloe",
+  "license": "MIT"
+}
