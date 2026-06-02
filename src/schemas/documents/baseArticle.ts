@@ -7,10 +7,10 @@ export const baseArticle = defineType({
   type: 'document',
   fields: [
     titleField(),
-    defineField({
-      name: 'slug',
-      type: 'internationalizedArrayLocalizedSlug',
-    }),
+    // defineField({
+    //   name: 'slug',
+    //   type: 'internationalizedArrayLocalizedSlug',
+    // }),
     defineField({ name: 'body', type: 'internationalizedArrayPortableTextBody' }),
   ],
 });
