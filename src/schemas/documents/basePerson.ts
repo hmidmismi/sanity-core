@@ -17,6 +17,6 @@ export const basePerson = defineType({
         },
       },
     }),
-    defineField({ name: 'body', type: 'internationalizedArrayPortableTextBody' }),
+    defineField({ name: 'Biography', type: 'internationalizedArrayPortableTextBody' }),
   ],
 });

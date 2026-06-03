@@ -1,5 +1,4 @@
 import { Card, Flex, Select, Stack, Switch, Text, TextInput } from '@sanity/ui';
-import type React from 'react';
 import { useCallback, useState } from 'react';
 import type { ObjectInputProps } from 'sanity';
 import { set, unset } from 'sanity';
@@ -29,7 +28,7 @@ export function FlexibleDateInput(props: ObjectInputProps<FlexibleDateValue>) {
   );
 
   const handleModeChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+    (e: any) => {
       const next = e.currentTarget.value as Mode;
       setMode(next);
       patch({
@@ -42,28 +41,28 @@ export function FlexibleDateInput(props: ObjectInputProps<FlexibleDateValue>) {
   );
 
   const handleCalendarChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: any) => {
       patch({ precision: 'day', value: e.currentTarget.value, circa: value?.circa ?? false });
     },
     [patch, value]
   );
 
   const handlePrecisionChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+    (e: any) => {
       patch({ ...value, precision: e.currentTarget.value as Precision, value: '' });
     },
     [patch, value]
   );
 
   const handlePartialChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: any) => {
       patch({ ...value, value: e.currentTarget.value });
     },
     [patch, value]
   );
 
   const handleCircaChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: any) => {
       patch({ ...value, circa: e.currentTarget.checked });
     },
     [patch, value]
