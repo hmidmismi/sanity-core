@@ -1,8 +1,10 @@
+// src/schemas/arrays/portableTextTitle.ts
+
 import { defineType } from 'sanity';
 
-export const portableTextCaption = defineType({
-  name: 'portableTextCaption',
-  title: 'Caption',
+export const portableTextTitle = defineType({
+  name: 'portableTextTitle',
+  title: 'Title',
   type: 'array',
   of: [
     {

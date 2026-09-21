@@ -1,12 +1,21 @@
+// src/schemas/documents/basePerson.ts
+
 import { defineField, defineType } from 'sanity';
-import { titleField } from '../../fields';
+import { ComputedStringInput } from '../../lib/components';
+import { textField } from '../../lib/fields';
 
 export const basePerson = defineType({
   name: 'person',
   title: 'Person',
   type: 'document',
   fields: [
-    titleField(),
+    textField({
+      title: 'Display Name',
+      components: {
+        input: (props: any) =>
+          ComputedStringInput({ ...props, fields: ['nameGiven', 'middleGiven', 'familyName'] }),
+      },
+    }),
     defineField({
       name: 'slug',
       type: 'slug',
@@ -17,6 +26,32 @@ export const basePerson = defineType({
         },
       },
     }),
+    defineField({
+      name: 'nameGiven',
+      title: 'Given Name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'middleGiven',
+      title: 'Middle Name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'familyName',
+      title: 'Family Name',
+      type: 'string',
+    }),
     defineField({ name: 'Biography', type: 'internationalizedArrayPortableTextBody' }),
   ],
+  preview: {
+    select: {
+      nameGiven: 'nameGiven',
+      middleGiven: 'middleGiven',
+      familyName: 'familyName',
+    },
+    prepare({ nameGiven, middleGiven, familyName }: any) {
+      const parts = [nameGiven, middleGiven, familyName].filter(Boolean);
+      return { title: parts.join(' ') };
+    },
+  },
 });

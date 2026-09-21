@@ -1,3 +1,5 @@
+// src/schemas/objects/textModule.ts
+
 import { TextIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
 

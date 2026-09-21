@@ -1,16 +1,14 @@
+// src/schemas/documents/baseArticle.ts
+
 import { defineField, defineType } from 'sanity';
-import { titleField } from '../../fields';
+import { localizedTextField } from '../../lib/fields';
 
 export const baseArticle = defineType({
   name: 'article',
   title: 'Article',
   type: 'document',
   fields: [
-    titleField(),
-    // defineField({
-    //   name: 'slug',
-    //   type: 'internationalizedArrayLocalizedSlug',
-    // }),
+    localizedTextField(),
     defineField({ name: 'body', type: 'internationalizedArrayPortableTextBody' }),
   ],
 });

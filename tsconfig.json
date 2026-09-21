@@ -1,12 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@chorusworks/tsconfig/tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "declaration": false,
+    "declarationMap": false,
+    "composite": false,
+    "noEmit": true,
+    "exactOptionalPropertyTypes": false
   },
   "include": [
-    "src"
+    "src/**/*",
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

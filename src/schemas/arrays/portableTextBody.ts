@@ -1,3 +1,5 @@
+// src/schemas/arrays/portableTextBody.ts
+
 import { colors as defaultColors } from '@hmidmismi/ui';
 import React from 'react';
 import { BsPalette2 } from 'react-icons/bs';
