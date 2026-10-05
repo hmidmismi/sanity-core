@@ -4,7 +4,7 @@ import { AddIcon, RemoveCircleIcon } from '@sanity/icons';
 import { Box, Button, Card, Flex, Stack, Switch, Text, TextInput } from '@sanity/ui';
 import { useCallback, useState } from 'react';
 import type { ObjectInputProps } from 'sanity';
-import { defineArrayMember, defineField, defineType, set, unset } from 'sanity';
+import { set, unset } from 'sanity';
 
 interface DateEntry {
   _key: string;
@@ -162,7 +162,7 @@ function DateRow({
 }
 
 export function FlexibleDateInput(props: FlexibleDateInputProps) {
-  const { value, onChange, readOnly, showCirca = false } = props;
+  const { value, onChange, readOnly, showCirca = true } = props;
 
   const patch = useCallback(
     (next: FlexibleDateValue | null) => onChange(next ? set(next) : unset()),
@@ -200,7 +200,7 @@ export function FlexibleDateInput(props: FlexibleDateInputProps) {
   );
 
   const handleRangeChange = useCallback(
-    (e: any) => patch({ ...value, isRange: e.currentTarget.checked, entries: [] }),
+    (e: any) => patch({ ...value, isRange: e.currentTarget.checked, entries: entries.slice(0, 1) }),
     [value, patch]
   );
 
@@ -293,31 +293,3 @@ export function FlexibleDateInput(props: FlexibleDateInputProps) {
     </Stack>
   );
 }
-
-export const flexibleDateType = defineType({
-  name: 'flexibleDate',
-  title: 'Flexible Date',
-  type: 'object',
-  fields: [
-    defineField({ name: 'circa', type: 'boolean' }),
-    defineField({ name: 'isRange', type: 'boolean' }),
-    defineField({
-      name: 'entries',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'object',
-          fields: [
-            defineField({ name: 'date', type: 'string' }),
-            defineField({ name: 'endDate', type: 'string' }),
-            defineField({ name: 'startTime', type: 'string' }),
-            defineField({ name: 'endTime', type: 'string' }),
-            defineField({ name: 'allDay', type: 'boolean' }),
-            defineField({ name: 'description', type: 'string' }),
-          ],
-        }),
-      ],
-    }),
-  ],
-  components: { input: FlexibleDateInput },
-});

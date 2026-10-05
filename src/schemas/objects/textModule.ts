@@ -1,7 +1,8 @@
-// src/schemas/objects/textModule.ts
-
 import { TextIcon } from '@sanity/icons';
 import { defineField, defineType } from 'sanity';
+import { localizedValue } from '../../lib/i18n';
+
+type Block = { _type?: string; children?: { text?: string }[] };
 
 export const textModule = defineType({
   name: 'textModule',
@@ -18,8 +19,10 @@ export const textModule = defineType({
   preview: {
     select: { text: 'text' },
     prepare({ text }) {
-      const plainText = text?.[0]?.children?.[0]?.text ?? 'Text Module';
-      return { title: plainText };
+      const blocks = localizedValue<Block[]>(text, 'en');
+      const first = blocks?.find((block) => block._type === 'block');
+      const plain = first?.children?.map((child) => child.text ?? '').join('') ?? '';
+      return { title: plain || 'Text Module' };
     },
   },
 });

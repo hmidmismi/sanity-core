@@ -1,1 +1,1 @@
-export * from './getLocalizedValue';
+export * from './localized';

@@ -1,16 +1,11 @@
-// src/lib/fields/textField.ts
-
 import { defineField } from 'sanity';
 
-export const titleField = (overrides: Record<string, any> = {}) =>
-  defineField({
-    name: 'title',
-    title: 'Title',
-    type: 'string',
-    ...overrides,
-  });
+/** A plain string title. */
+export const titleField = (overrides: Record<string, unknown> = {}) =>
+  defineField({ name: 'title', title: 'Title', type: 'string', ...overrides });
 
-export const localizedTitleField = (overrides: Record<string, any> = {}) =>
+/** A localized title: one string per language. */
+export const localizedTitleField = (overrides: Record<string, unknown> = {}) =>
   defineField({
     name: 'title',
     title: 'Title',
@@ -18,18 +13,6 @@ export const localizedTitleField = (overrides: Record<string, any> = {}) =>
     ...overrides,
   });
 
-export const textField = (overrides: Record<string, any> = {}) =>
-  defineField({
-    name: 'text',
-    title: 'Text',
-    type: 'text',
-    ...overrides,
-  });
-
-export const localizedTextField = (overrides: Record<string, any> = {}) =>
-  defineField({
-    name: 'text',
-    title: 'Text',
-    type: 'internationalizedArrayString',
-    ...overrides,
-  });
+/** A multi-line plain text field. */
+export const textField = (overrides: Record<string, unknown> = {}) =>
+  defineField({ name: 'text', title: 'Text', type: 'text', ...overrides });

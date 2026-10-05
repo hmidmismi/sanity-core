@@ -4,7 +4,7 @@ import { AddIcon, ChevronDownIcon, ChevronRightIcon, RemoveCircleIcon } from '@s
 import { Box, Button, Card, Flex, Stack, Text, TextInput } from '@sanity/ui';
 import { useCallback, useState } from 'react';
 import type { ObjectInputProps } from 'sanity';
-import { defineArrayMember, defineField, defineType, set, unset } from 'sanity';
+import { set, unset } from 'sanity';
 
 const DAYS = [
   'sunday',
@@ -224,38 +224,3 @@ export function FlexibleScheduleInput(props: ObjectInputProps<FlexibleScheduleVa
     </Stack>
   );
 }
-
-export const flexibleScheduleType = defineType({
-  name: 'flexibleSchedule',
-  title: 'Flexible Schedule',
-  type: 'object',
-  fields: [
-    defineField({
-      name: 'schedule',
-      type: 'array',
-      of: [
-        defineArrayMember({
-          type: 'object',
-          fields: [
-            defineField({ name: 'day', type: 'string' }),
-            defineField({
-              name: 'entries',
-              type: 'array',
-              of: [
-                defineArrayMember({
-                  type: 'object',
-                  fields: [
-                    defineField({ name: 'label', type: 'string' }),
-                    defineField({ name: 'startTime', type: 'string' }),
-                    defineField({ name: 'endTime', type: 'string' }),
-                  ],
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-  ],
-  components: { input: FlexibleScheduleInput },
-});

@@ -1,88 +1,110 @@
-// src/schemas/arrays/portableTextBody.ts
+import { colors as palette } from '@baikikai/models';
+import { BsLink45Deg, BsPalette2 } from 'react-icons/bs';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
-import { colors as defaultColors } from '@hmidmismi/ui';
-import React from 'react';
-import { BsPalette2 } from 'react-icons/bs';
-import { defineType } from 'sanity';
+type Options = {
+  /** Document types a link annotation may point at. Leave empty to offer external links only. */
+  internalLinkTypes?: string[];
+};
 
-export const portableTextBody = defineType({
-  name: 'portableTextBody',
-  title: 'Body',
-  type: 'array',
-  of: [
-    {
-      type: 'block',
-      styles: [
-        { title: 'Normal', value: 'normal' },
-        { title: 'Heading 2', value: 'h2' },
-        { title: 'Heading 3', value: 'h3' },
-        { title: 'Heading 4', value: 'h4' },
-        { title: 'Blockquote', value: 'blockquote' },
-      ],
-      lists: [
-        { title: 'Bullet', value: 'bullet' },
-        { title: 'Numbered', value: 'number' },
-      ],
-      marks: {
-        decorators: [
-          { title: 'Bold', value: 'strong' },
-          { title: 'Italic', value: 'em' },
-          { title: 'Underline', value: 'underline' },
-          { title: 'Strike Through', value: 'strike-through' },
+function internalLinkAnnotation(types: string[]) {
+  return defineArrayMember({
+    name: 'internalLink',
+    type: 'object',
+    title: 'Link to a page',
+    icon: BsLink45Deg,
+    fields: [
+      defineField({
+        name: 'reference',
+        type: 'reference',
+        to: types.map((type) => ({ type })),
+        validation: (Rule) => Rule.required(),
+      }),
+    ],
+  });
+}
+
+/**
+ * The rich-text body. Create it with the document types an internal link may reference, and register the result
+ * under the name `portableTextBody`.
+ *
+ * @param options - the internal link types.
+ * @returns the array type.
+ */
+export function createPortableTextBody({ internalLinkTypes = [] }: Options = {}) {
+  return defineType({
+    name: 'portableTextBody',
+    title: 'Body',
+    type: 'array',
+    of: [
+      defineArrayMember({
+        type: 'block',
+        styles: [
+          { title: 'Normal', value: 'normal' },
+          { title: 'Heading 2', value: 'h2' },
+          { title: 'Heading 3', value: 'h3' },
+          { title: 'Heading 4', value: 'h4' },
+          { title: 'Blockquote', value: 'blockquote' },
         ],
-        annotations: [
-          {
-            name: 'link',
-            type: 'object',
-            title: 'Link',
-            fields: [
-              {
-                name: 'href',
-                type: 'url',
-                validation: (Rule: any) => Rule.uri({ scheme: ['http', 'https', 'mailto', 'tel'] }),
-              },
-              { name: 'blank', type: 'boolean', initialValue: false },
-            ],
-          },
-          {
-            name: 'color',
-            type: 'object',
-            title: 'Text Color',
-            icon: BsPalette2,
-            fields: [
-              {
-                name: 'name',
-                title: 'Color',
-                type: 'string',
-                options: {
-                  layout: 'radio',
-                  direction: 'vertical',
-                  list: defaultColors.map(({ title, value, hex }: any) => ({
-                    title: React.createElement(
-                      'div',
-                      { style: { display: 'flex', alignItems: 'center', gap: '1rem' } },
-                      [
-                        React.createElement('div', {
-                          key: `${value}-swatch`,
-                          style: {
-                            width: '36px',
-                            height: '36px',
-                            borderRadius: '3px',
-                            border: '1px solid #ccc',
-                            backgroundColor: hex,
-                          },
-                        }),
-                        React.createElement('span', { key: `${value}-label` }, title),
-                      ]
-                    ),
-                    value,
-                  })),
-                },
-              },
-            ],
-          },
+        lists: [
+          { title: 'Bullet', value: 'bullet' },
+          { title: 'Numbered', value: 'number' },
         ],
-      },
-    },
-  ],
-});
+        marks: {
+          decorators: [
+            { title: 'Bold', value: 'strong' },
+            { title: 'Italic', value: 'em' },
+            { title: 'Underline', value: 'underline' },
+            { title: 'Strike Through', value: 'strike-through' },
+          ],
+          annotations: [
+            {
+              name: 'link',
+              type: 'object',
+              title: 'Link',
+              fields: [
+                defineField({
+                  name: 'href',
+                  type: 'url',
+                  validation: (Rule) =>
+                    Rule.required().uri({ scheme: ['http', 'https', 'mailto', 'tel'] }),
+                }),
+                defineField({
+                  name: 'blank',
+                  title: 'Open in a new tab',
+                  type: 'boolean',
+                  initialValue: false,
+                }),
+              ],
+            },
+            ...(internalLinkTypes.length > 0 ? [internalLinkAnnotation(internalLinkTypes)] : []),
+            {
+              name: 'color',
+              type: 'object',
+              title: 'Text Color',
+              icon: BsPalette2,
+              fields: [
+                defineField({
+                  name: 'name',
+                  title: 'Color',
+                  type: 'string',
+                  options: {
+                    layout: 'radio',
+                    direction: 'vertical',
+                    list: palette.map(({ title, value, hex }) => ({
+                      title: `${title} (${hex})`,
+                      value,
+                    })),
+                  },
+                }),
+              ],
+            },
+          ],
+        },
+      }),
+    ],
+  });
+}
+
+/** The default body, with external links only. */
+export const portableTextBody = createPortableTextBody();
