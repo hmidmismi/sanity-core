@@ -1,4 +1,6 @@
 {
-  "extends": "@hmidmismi/tsconfig/tsconfig.base.json",
-  "include": ["src"]
+  "extends": "@hmidmismi/tsconfig/tsconfig.sanity-studio.json",
+  "include": [
+    "src"
+  ]
 }
