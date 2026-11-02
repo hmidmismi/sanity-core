@@ -1,11 +1,19 @@
-import { colors as palette } from '@hmidmismi/config/brand-colors';
 import { BsLink45Deg, BsPalette2 } from 'react-icons/bs';
 import { defineArrayMember, defineField, defineType } from 'sanity';
+
+/** One text color an editor may apply: `value` is the name the front end maps to a color, `hex` only shows the option. */
+export type ColorOption = {
+  title: string;
+  value: string;
+  hex: string;
+};
 
 type Options = {
   /** Document types a link annotation may point at. Leave empty to offer external links only. */
   internalLinkTypes?: string[];
-  /** Object types the body may hold between its text blocks, such as `table` or `code` (registered by plugins). */
+  /** Text colors an editor may apply. Leave empty to offer none. */
+  colors?: ColorOption[];
+  /** Other registered types an editor may insert between blocks, such as `table` or `code`. */
   extraTypes?: string[];
 };
 
@@ -26,14 +34,42 @@ function internalLinkAnnotation(types: string[]) {
   });
 }
 
+function colorAnnotation(colors: ColorOption[]) {
+  return defineArrayMember({
+    name: 'color',
+    type: 'object',
+    title: 'Text Color',
+    icon: BsPalette2,
+    fields: [
+      defineField({
+        name: 'name',
+        title: 'Color',
+        type: 'string',
+        options: {
+          layout: 'radio',
+          direction: 'vertical',
+          list: colors.map(({ title, value, hex }) => ({
+            title: `${title} (${hex})`,
+            value,
+          })),
+        },
+      }),
+    ],
+  });
+}
+
 /**
  * The rich-text body. Create it with the document types an internal link may reference, and register the result
  * under the name `portableTextBody`.
  *
- * @param options - the internal link types and any extra block object types.
+ * @param options - the internal link types, the text colors and the extra block types.
  * @returns the array type.
  */
-export function createPortableTextBody({ internalLinkTypes = [], extraTypes = [] }: Options = {}) {
+export function createPortableTextBody({
+  internalLinkTypes = [],
+  colors = [],
+  extraTypes = [],
+}: Options = {}) {
   return defineType({
     name: 'portableTextBody',
     title: 'Body',
@@ -58,7 +94,6 @@ export function createPortableTextBody({ internalLinkTypes = [], extraTypes = []
             { title: 'Italic', value: 'em' },
             { title: 'Underline', value: 'underline' },
             { title: 'Strike Through', value: 'strike-through' },
-            { title: 'Code', value: 'code' },
           ],
           annotations: [
             {
@@ -81,27 +116,7 @@ export function createPortableTextBody({ internalLinkTypes = [], extraTypes = []
               ],
             },
             ...(internalLinkTypes.length > 0 ? [internalLinkAnnotation(internalLinkTypes)] : []),
-            {
-              name: 'color',
-              type: 'object',
-              title: 'Text Color',
-              icon: BsPalette2,
-              fields: [
-                defineField({
-                  name: 'name',
-                  title: 'Color',
-                  type: 'string',
-                  options: {
-                    layout: 'radio',
-                    direction: 'vertical',
-                    list: palette.map(({ title, value, hex }) => ({
-                      title: `${title} (${hex})`,
-                      value,
-                    })),
-                  },
-                }),
-              ],
-            },
+            ...(colors.length > 0 ? [colorAnnotation(colors)] : []),
           ],
         },
       }),
